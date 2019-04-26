@@ -30,14 +30,14 @@ namespace RandomFixtureKit.Tests
 
             var foo = xs.ToLookup(x => x);
             foo.Count.Should().Be(8);
-            foo[Nanika.None].Count().Should().BeCloseTo(100, 20);
-            foo[Nanika.Tako].Count().Should().BeCloseTo(100, 20);
-            foo[Nanika.Tako | Nanika.Ika].Count().Should().BeCloseTo(100, 20);
-            foo[Nanika.Tako | Nanika.Tamago].Count().Should().BeCloseTo(100, 20);
-            foo[Nanika.Tako | Nanika.Ika | Nanika.Tamago].Count().Should().BeCloseTo(100, 20);
-            foo[Nanika.Ika].Count().Should().BeCloseTo(100, 20);
-            foo[Nanika.Ika | Nanika.Tamago].Count().Should().BeCloseTo(100, 20);
-            foo[Nanika.Tamago].Count().Should().BeCloseTo(100, 20);
+            foo[Nanika.None].Count().Should().BeCloseTo(100, 35);
+            foo[Nanika.Tako].Count().Should().BeCloseTo(100, 35);
+            foo[Nanika.Tako | Nanika.Ika].Count().Should().BeCloseTo(100, 35);
+            foo[Nanika.Tako | Nanika.Tamago].Count().Should().BeCloseTo(100, 35);
+            foo[Nanika.Tako | Nanika.Ika | Nanika.Tamago].Count().Should().BeCloseTo(100, 35);
+            foo[Nanika.Ika].Count().Should().BeCloseTo(100, 35);
+            foo[Nanika.Ika | Nanika.Tamago].Count().Should().BeCloseTo(100, 35);
+            foo[Nanika.Tamago].Count().Should().BeCloseTo(100, 35);
         }
 
         enum Fruit

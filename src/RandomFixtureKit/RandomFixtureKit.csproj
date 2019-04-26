@@ -3,10 +3,26 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>release.snk</AssemblyOriginatorKeyFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Company>Cysharp</Company>
+
+    <!-- NuGet -->
+    <PackageId>RandomFixtureKit</PackageId>
+    <PackageVersion>$(Version)</PackageVersion>
+    <Authors>Cysharp</Authors>
+    <Copyright>Cysharp</Copyright>
+    <Description>Fill random/edge-case value to target type for unit testing.</Description>
+    <PackageProjectUrl>https://github.com/Cysharp/RandomFixtureKit</PackageProjectUrl>
+    <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>test</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  <PropertyGroup>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
 </Project>

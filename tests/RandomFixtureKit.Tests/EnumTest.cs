@@ -16,9 +16,9 @@ namespace RandomFixtureKit.Tests
 
             var foo = xs.ToLookup(x => x);
             foo.Count.Should().Be(3);
-            foo[Fruit.Orange].Count().Should().BeCloseTo(300, 30);
-            foo[Fruit.Apple].Count().Should().BeCloseTo(300, 30);
-            foo[Fruit.Grape].Count().Should().BeCloseTo(300, 30);
+            foo[Fruit.Orange].Count().Should().BeCloseTo(300, 50);
+            foo[Fruit.Apple].Count().Should().BeCloseTo(300, 50);
+            foo[Fruit.Grape].Count().Should().BeCloseTo(300, 50);
         }
 
         [Fact]

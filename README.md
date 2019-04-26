@@ -4,9 +4,11 @@ RandomFixturekit
 
 Fill random/edge-case value to target type for unit testing, supports both .NET Standard and Unity.
 
+![image](https://user-images.githubusercontent.com/46207/56805033-abce0480-6862-11e9-91d0-7ca9c08aa688.png)
+
 Documantation is not yet but core library is completed. .unitypackage and upm coming soon.
 
-NuGet: [Ulid](https://www.nuget.org/packages/RandomFixturekit)
+NuGet: [RandomFixturekit](https://www.nuget.org/packages/RandomFixturekit)
 
 ```
 Install-Package RandomFixturekit
@@ -46,6 +48,8 @@ var resolver = new CompositeResolver(new[] {
         StandardResolver.NonNull
     });
 ```
+
+![image](https://user-images.githubusercontent.com/46207/56805214-44fd1b00-6863-11e9-9541-b8ff30b7599a.png)
 
 edge-case, for example int is filled `int.MinValue`, `int.MaxValue`, `0`, `-1` or `1`. collection(array, list, etc...) is filled `null`, `zero-elements`, `one-elements`, `nine-elements`.
 

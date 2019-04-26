@@ -15,13 +15,15 @@ namespace RandomFixtureKit
         public static readonly IGeneratorResolver NonNull = new CompositeResolver(new[]
         {
             BuiltinResolver.Instance,
-            ObjectResolver.Instance
+            ObjectResolver.Instance,
+            MappingObjectResolver.Default
         });
 
         public static readonly IGeneratorResolver AllowNull = new CompositeResolver(new[]
         {
             BuiltinResolver.Instance,
-            AllowNullObjectResolver.Instance
+            AllowNullObjectResolver.Instance,
+            MappingObjectResolver.Default
         });
 
         public static readonly IGeneratorResolver EdgeCase = new CompositeResolver(new[]
@@ -101,6 +103,29 @@ namespace RandomFixtureKit
         public IGenerator GetGenerator(Type type)
         {
             return resolvers[RandomProvider.GetRandom().Next(0, resolvers.Length)].GetGenerator(type);
+        }
+    }
+
+    public class MappingObjectResolver : IGeneratorResolver
+    {
+        public static readonly MappingObjectResolver Default = new MappingObjectResolver();
+
+        ConcurrentDictionary<Type, IGenerator> generators = new ConcurrentDictionary<Type, IGenerator>();
+
+        public void Register<TFrom, TTo>()
+            where TTo : TFrom
+        {
+            Register(typeof(TFrom), typeof(TTo));
+        }
+
+        public void Register(Type from, Type to)
+        {
+            generators[from] = new MappingGenerator(from, to);
+        }
+
+        public IGenerator GetGenerator(Type type)
+        {
+            return generators.TryGetValue(type, out var value) ? value : null;
         }
     }
 }
@@ -380,6 +405,7 @@ namespace RandomFixtureKit.Resolvers
 
         public IGenerator GetGenerator(Type type)
         {
+            if (type.IsAbstract || type.IsInterface || type.IsPrimitive) return null;
             return new ObjectGenerator(type);
         }
     }
@@ -395,6 +421,7 @@ namespace RandomFixtureKit.Resolvers
 
         public IGenerator GetGenerator(Type type)
         {
+            if (type.IsAbstract || type.IsInterface || type.IsPrimitive) return null;
             return new AllowNullObjectGenerator(type);
         }
     }

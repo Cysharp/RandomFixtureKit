@@ -40,6 +40,26 @@ namespace RandomFixtureKit.Generators
         }
     }
 
+    public class MappingGenerator : IGenerator
+    {
+        readonly Type from;
+        readonly Type to;
+
+        public Type Type => from;
+
+        public MappingGenerator(Type from, Type to)
+        {
+            this.from = from;
+            this.to = to;
+        }
+
+
+        public object Generate(GenerationContext context)
+        {
+            return context.GetGenerator(to).Generate(context);
+        }
+    }
+
     public class AllowNullObjectGenerator : IGenerator
     {
         readonly Type type;

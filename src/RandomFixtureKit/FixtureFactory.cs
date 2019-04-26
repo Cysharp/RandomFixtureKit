@@ -18,6 +18,15 @@ namespace RandomFixtureKit
             }
         }
 
+        /// <summary>
+        /// Shorthand of MappingObjectResolver.Default.Register.
+        /// </summary>
+        public static void RegisterMap<TFrom, TTo>()
+            where TTo : TFrom
+        {
+            MappingObjectResolver.Default.Register(typeof(TFrom), typeof(TTo));
+        }
+
         public static object Create(Type type, int recursiveCount = 3, IGeneratorResolver resolver = null)
         {
             resolver = resolver ?? Default;

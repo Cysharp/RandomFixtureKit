@@ -47,6 +47,10 @@ var resolver = new CompositeResolver(new[] {
     }, new[] {
         StandardResolver.NonNull
     });
+
+// for fill interface type, need to map before call create
+FixtureFactory.RegisterMap<IFoo, Foo>();
+var v = FixtureFactory.Create<IFoo>(); // return Foo object
 ```
 
 ![image](https://user-images.githubusercontent.com/46207/56805214-44fd1b00-6863-11e9-9541-b8ff30b7599a.png)

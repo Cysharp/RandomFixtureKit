@@ -1,6 +1,6 @@
 RandomFixtureKit
 ===
-[![CircleCI](https://circleci.com/gh/Cysharp/RandomFixturekit.svg?style=svg)](https://circleci.com/gh/Cysharp/RandomFixturekit)
+[![CircleCI](https://circleci.com/gh/Cysharp/RandomFixtureKit.svg?style=svg)](https://circleci.com/gh/Cysharp/RandomFixtureKit)
 
 Fill random/edge-case value to target type for unit testing, supports both .NET Standard and Unity.
 
@@ -8,7 +8,7 @@ Fill random/edge-case value to target type for unit testing, supports both .NET 
 
 Documantation is not yet but core library is completed. .unitypackage and upm coming soon.
 
-NuGet: [RandomFixturekit](https://www.nuget.org/packages/RandomFixturekit)
+NuGet: [RandomFixtureKit](https://www.nuget.org/packages/RandomFixtureKit)
 
 ```
 Install-Package RandomFixturekit

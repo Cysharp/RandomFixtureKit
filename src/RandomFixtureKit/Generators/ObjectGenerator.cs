@@ -75,7 +75,8 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(GenerationContext context)
         {
-            if (RandomProvider.GetRandom().NextBoolean())
+            // root object should not be null.
+            if (!context.TypeStack.IsRoot && RandomProvider.GetRandom().NextBoolean())
             {
                 return null;
             }

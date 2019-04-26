@@ -141,5 +141,17 @@ namespace RandomFixtureKit.Tests
             value[1].Count().Should().BeCloseTo(200, 50);
             value[9].Count().Should().BeCloseTo(200, 50);
         }
+
+        [Fact]
+        public void RootObjectShouldNotBeNull()
+        {
+            var values = FixtureFactory.CreateMany<MyClass>(1000, resolver: StandardResolver.EdgeCase);
+            values.Count(x => x != null).Should().Be(1000);
+        }
+
+        public class MyClass
+        {
+
+        }
     }
 }

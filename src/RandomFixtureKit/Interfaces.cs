@@ -43,6 +43,8 @@ namespace RandomFixtureKit
             return new Exit(this);
         }
 
+        public bool IsRoot => stack.Count == 0;
+
         public int GetCount(Type type)
         {
             var c = 0;

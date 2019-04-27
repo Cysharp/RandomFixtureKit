@@ -24,7 +24,7 @@ var value = FixtureFactory.Create<Foo>();
 // get array
 var values = FixtureFactory.CreateMany<Bar>();
 
-// get temporal value
+// get temporal value(you can use this values to use invoke target method)
 var (x, y, z) = FixtureFactory.Create<(int, string, short)>();
 ```
 

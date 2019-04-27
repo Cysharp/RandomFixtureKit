@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace RandomFixtureKit
 {
@@ -19,12 +20,14 @@ namespace RandomFixtureKit
         public readonly int RecursiveCount;
         public readonly TypeStack TypeStack;
         public readonly IGeneratorResolver Resolver;
+        public readonly FieldInfo FieldInfo;
 
-        public GenerationContext(int recursiveCount, TypeStack typeStack, IGeneratorResolver resolver)
+        public GenerationContext(int recursiveCount, TypeStack typeStack, IGeneratorResolver resolver, FieldInfo fieldInfo)
         {
             RecursiveCount = recursiveCount;
             TypeStack = typeStack;
             Resolver = resolver;
+            FieldInfo = fieldInfo;
         }
 
         public IGenerator GetGenerator(Type type)

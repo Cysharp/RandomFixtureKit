@@ -31,7 +31,7 @@ namespace RandomFixtureKit.Generators
                     }
 
                     var generator = context.GetGenerator(item.FieldType);
-                    var value = generator.Generate(context);
+                    var value = generator.Generate(new GenerationContext(context.RecursiveCount, context.TypeStack, context.Resolver, item));
                     item.SetValue(obj, value);
                 }
 

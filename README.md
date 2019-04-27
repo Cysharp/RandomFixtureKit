@@ -2,7 +2,7 @@ RandomFixtureKit
 ===
 [![CircleCI](https://circleci.com/gh/Cysharp/RandomFixtureKit.svg?style=svg)](https://circleci.com/gh/Cysharp/RandomFixtureKit)
 
-Fill random/edge-case value to target type for unit testing, supports both .NET Standard and Unity.
+Fill random/edge-case value to target type for unit testing, supports both .NET Standard and Unity. This lib is similar as [AutoFixture](https://github.com/AutoFixture/AutoFixture) but has some different things.
 
 ![image](https://user-images.githubusercontent.com/46207/56805033-abce0480-6862-11e9-91d0-7ca9c08aa688.png)
 

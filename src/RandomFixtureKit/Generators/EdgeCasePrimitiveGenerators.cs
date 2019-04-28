@@ -8,7 +8,7 @@ namespace RandomFixtureKit.Generators
 
         protected abstract T[] Values { get; }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return Values[RandomProvider.GetRandom().Next(0, Values.Length)];
         }

@@ -15,7 +15,7 @@ namespace RandomFixtureKit.Generators
             this.nullableType = nullableType;
         }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             if (RandomProvider.GetRandom().NextBoolean())
             {

@@ -17,7 +17,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => type;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             using (context.TypeStack.Enter(type))
             {
@@ -54,7 +54,7 @@ namespace RandomFixtureKit.Generators
         }
 
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return context.GetGenerator(to).Generate(context);
         }
@@ -73,7 +73,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => type;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             // root object should not be null.
             if (!context.TypeStack.IsRoot && RandomProvider.GetRandom().NextBoolean())

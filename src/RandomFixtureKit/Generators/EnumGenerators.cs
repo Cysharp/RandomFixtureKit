@@ -26,7 +26,7 @@ namespace RandomFixtureKit.Generators
             }
         }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return values.GetValue(RandomProvider.GetRandom().Next(0, values.Length));
         }

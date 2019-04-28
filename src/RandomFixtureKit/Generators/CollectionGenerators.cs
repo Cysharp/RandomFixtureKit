@@ -17,7 +17,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type { get; private set; }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var elemType = Type.GetElementType();
             var generator = context.GetGenerator(elemType);
@@ -83,7 +83,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => type;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var elemType = type.GetGenericArguments()[0];
             var arrayGenerator = context.GetGenerator(elemType.MakeArrayType());
@@ -107,7 +107,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => type;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var elemType = type.GetGenericArguments()[0];
             var generator = context.GetGenerator(elemType);
@@ -136,7 +136,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => type;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var genArgs = type.GetGenericArguments();
             var keyType = genArgs[0];
@@ -167,7 +167,7 @@ namespace RandomFixtureKit.Generators
             this.length = length;
         }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var elemType = Type.GetGenericArguments()[0];
             var generator = context.GetGenerator(elemType);
@@ -247,7 +247,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => type;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var genType = type.GenericTypeArguments;
             var generator = context.GetGenerator(typeof(Dictionary<,>).MakeGenericType(new[] { genType[0], genType[1].MakeArrayType() }));

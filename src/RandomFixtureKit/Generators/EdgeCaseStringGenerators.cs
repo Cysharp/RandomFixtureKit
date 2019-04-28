@@ -6,7 +6,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(string);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var rand = RandomProvider.GetRandom();
             var x = rand.Next(0, 5);
@@ -33,7 +33,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(string);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var rand = RandomProvider.GetRandom();
             var x = rand.Next(0, 5);

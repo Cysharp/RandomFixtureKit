@@ -12,10 +12,10 @@ namespace RandomFixtureKit
     public interface IGenerator
     {
         Type Type { get; }
-        object Generate(GenerationContext context);
+        object Generate(in GenerationContext context);
     }
 
-    public struct GenerationContext
+    public ref struct GenerationContext
     {
         public readonly int RecursiveCount;
         public readonly TypeStack TypeStack;

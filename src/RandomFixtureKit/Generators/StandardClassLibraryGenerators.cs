@@ -14,7 +14,7 @@ namespace RandomFixtureKit.Generators
 
         static readonly DateTimeOffsetGenerator generator = new DateTimeOffsetGenerator();
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return ((DateTimeOffset)generator.Generate(context)).DateTime;
         }
@@ -42,7 +42,7 @@ namespace RandomFixtureKit.Generators
         const long MinMilliseconds = MinTicks / TimeSpan.TicksPerMillisecond - UnixEpochMilliseconds;
         const long MaxMilliseconds = MaxTicks / TimeSpan.TicksPerMillisecond - UnixEpochMilliseconds;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return DateTimeOffset.FromUnixTimeMilliseconds(RandomProvider.GetRandom().NextLong(MinMilliseconds, MaxMilliseconds));
         }
@@ -52,7 +52,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(Guid);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return Guid.NewGuid();
         }
@@ -64,7 +64,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => typeof(Uri);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var url = "http://" + (string)alphabetGenerator.Generate(context) + ".com/" + (string)alphabetGenerator.Generate(context);
             return new Uri(url);
@@ -75,7 +75,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(Version);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var major = RandomProvider.GetRandom().Next(0, 999);
             var minor = RandomProvider.GetRandom().Next(0, 999);
@@ -95,7 +95,7 @@ namespace RandomFixtureKit.Generators
             this.Type = type;
         }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var genArgs = Type.GetGenericArguments();
             var keyGen = context.GetGenerator(genArgs[0]);
@@ -109,7 +109,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(StringBuilder);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var strGen = context.GetGenerator(typeof(string));
             return new StringBuilder((string)strGen.Generate(context));
@@ -120,7 +120,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(BitArray);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var generator = new ArrayGenerator(typeof(bool[]), 8 * 9);
             var values = (bool[])generator.Generate(context);
@@ -134,7 +134,7 @@ namespace RandomFixtureKit.Generators
 
         Type[] typeCache;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             if (typeCache == null)
             {
@@ -164,7 +164,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => typeof(BigInteger);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return new BigInteger((byte[])byteArrayGenerator.Generate(context));
         }
@@ -176,7 +176,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => typeof(Complex);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return new Complex((double)doubleGenerator.Generate(context), (double)doubleGenerator.Generate(context));
         }
@@ -191,7 +191,7 @@ namespace RandomFixtureKit.Generators
             this.Type = type;
         }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var elem = Type.GetGenericArguments()[0];
             var helper = Activator.CreateInstance(typeof(ValueGenerator<>).MakeGenericType(elem), new[] { (object)context.GetGenerator(elem).Generate(context) });
@@ -218,7 +218,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(Task);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return Task.CompletedTask;
         }
@@ -233,7 +233,7 @@ namespace RandomFixtureKit.Generators
             this.Type = type;
         }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return typeof(Task).GetMethod("FromResult").MakeGenericMethod(Type.GetGenericArguments()[0]).Invoke(null, new[] { context.GetGenerator(Type.GetGenericArguments()[0]).Generate(context) });
         }

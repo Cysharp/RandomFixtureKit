@@ -9,7 +9,7 @@ namespace RandomFixtureKit.Generators
         protected abstract int Length { get; }
         protected abstract char[] Chars { get; }
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var rand = RandomProvider.GetRandom();
             var xs = new char[Length];
@@ -78,6 +78,16 @@ namespace RandomFixtureKit.Generators
         public JapaneseHiraganaGenerator(int stringLength)
         {
             this.length = stringLength;
+        }
+    }
+
+    public class GuidStringGenerator : IGenerator
+    {
+        public Type Type => typeof(string);
+
+        public object Generate(in GenerationContext context)
+        {
+            return Guid.NewGuid().ToString();
         }
     }
 

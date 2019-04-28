@@ -18,7 +18,7 @@ namespace RandomFixtureKit.Generators
 
         public Type Type => type;
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var x = RandomProvider.GetRandom().Next(0, 4);
             if (x == 0)

@@ -9,7 +9,7 @@ namespace RandomFixtureKit.Generators
 
         public abstract object Generate();
 
-        public object Generate(GenerationContext context) => Generate();
+        public object Generate(in GenerationContext context) => Generate();
 
         protected unsafe object Generate(Func<byte[], int, T> converter)
         {
@@ -112,7 +112,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(Boolean);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             return (bool)(RandomProvider.GetRandom().Next(0, 2) == 0);
         }
@@ -122,7 +122,7 @@ namespace RandomFixtureKit.Generators
     {
         public Type Type => typeof(Decimal);
 
-        public object Generate(GenerationContext context)
+        public object Generate(in GenerationContext context)
         {
             var rand = RandomProvider.GetRandom();
             var lo = rand.Next();

@@ -27,7 +27,7 @@ jobs:
       - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -logFile -createManualActivationFile || exit 0
       - run: cat Unity_v2019.1.0f2.alf # file name same as image's version
       # get from UNITY_LICENSE envvar(base64 encoded), this file is generated from above manual activation
-      - run: echo ${UNITY_LICENSE} | base64 --decode  >> .circleci/Unity_v2018.x.ulf
+      - run: echo ${UNITY_LICENSE} | base64 -di  >> .circleci/Unity_v2018.x.ulf
       - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -manualLicenseFile .circleci/Unity_v2018.x.ulf || exit 0
       # create cli IL2CPP testrunner to bin/tests and run it.
       - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.BuildCliTestLinux

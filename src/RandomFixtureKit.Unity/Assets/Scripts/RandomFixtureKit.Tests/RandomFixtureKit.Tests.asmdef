@@ -1,0 +1,17 @@
+{
+    "name": "RandomFixtureKit.Tests",
+    "references": [
+        "GUID:378949fe841326f4e8f237d111a79321"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

@@ -1,28 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>release.snk</AssemblyOriginatorKeyFile>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Company>Cysharp</Company>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>7.3</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>release.snk</AssemblyOriginatorKeyFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Company>Cysharp</Company>
 
-    <!-- NuGet -->
-    <PackageId>RandomFixtureKit</PackageId>
-    <PackageVersion>$(Version)</PackageVersion>
-    <Authors>Cysharp</Authors>
-    <Copyright>Cysharp</Copyright>
-    <Description>Fill random/edge-case value to target type for unit testing.</Description>
-    <PackageProjectUrl>https://github.com/Cysharp/RandomFixtureKit</PackageProjectUrl>
-    <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>test</PackageTags>
-  </PropertyGroup>
+        <!-- NuGet -->
+        <PackageId>RandomFixtureKit</PackageId>
+        <PackageVersion>$(Version)</PackageVersion>
+        <Authors>Cysharp</Authors>
+        <Copyright>Cysharp</Copyright>
+        <Description>Fill random/edge-case value to target type for unit testing.</Description>
+        <PackageProjectUrl>https://github.com/Cysharp/RandomFixtureKit</PackageProjectUrl>
+        <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>test</PackageTags>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <NoWarn>1701;1702;1591</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup>
+        <NoWarn>1701;1702;1591</NoWarn>
+    </PropertyGroup>
+
+
+    <!-- Copy files for unity build/test -->
+    <PropertyGroup>
+        <UnityAssetsRoot>$(ProjectDir)..\RandomFixtureKit.Unity\Assets\Scripts\</UnityAssetsRoot>
+    </PropertyGroup>
+    <ItemGroup>
+        <LibrarySourceFiles Include="$(ProjectDir)**\*.cs" Exclude="**\bin\**\*.*;**\obj\**\*.*" />
+        <UnitTestFiles Include="$(ProjectDir)..\..\tests\RandomFixtureKit.Tests\**\*.cs" Exclude="**\bin\**\*.*;**\obj\**\*.*" />
+    </ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Copy SourceFiles="@(LibrarySourceFiles)" DestinationFiles="$(UnityAssetsRoot)RandomFixtureKit\%(RecursiveDir)%(Filename)%(Extension)" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(UnitTestFiles)" DestinationFiles="$(UnityAssetsRoot)RandomFixtureKit.Tests\Tests\%(RecursiveDir)%(Filename)%(Extension)" SkipUnchangedFiles="true" />
+    </Target>
 
 </Project>

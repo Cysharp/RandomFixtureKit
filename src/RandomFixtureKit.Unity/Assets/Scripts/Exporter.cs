@@ -81,7 +81,7 @@ public static class Exporter
                     | BuildOptions.EnableHeadlessMode
                     | BuildOptions.IncludeTestAssemblies,
             scenes = new[] { "Assets/Scripts/RuntimeUnitTestToolkit/UnitTest.unity" },
-            locationPathName = "bin/tests.exe"
+            locationPathName = "bin/tests" + ((buildTarget == BuildTarget.StandaloneWindows64) ? ".exe" : "")
         });
         UnityEngine.Debug.Log("Build Completed, files under bin dir.");
     }

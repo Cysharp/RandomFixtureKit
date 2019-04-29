@@ -20,8 +20,8 @@ jobs:
       - run: dotnet test -c Debug --no-build
   # Unity, create .unitypackage and make IL2CPP headless build and test it.
   build-unity:
-    working_directory: ./src/RandomFixtureKit.Unity
     executor: unity
+    working_directory: /src/RandomFixtureKit.Unity
     steps:
       - checkout
       # get activation file, if fail to activate unity, use this key and activate from https://license.unity3d.com/manual

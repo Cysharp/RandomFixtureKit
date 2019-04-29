@@ -70,11 +70,11 @@ public static class Exporter
         }
 
         // Linux => Mono(currently not supported)
-        if (buildTarget == BuildTarget.StandaloneLinux64)
-        {
-            PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
-        }
-        else
+        //if (buildTarget == BuildTarget.StandaloneLinux64)
+        //{
+        //    PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
+        //}
+        //else
         {
             PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.IL2CPP);
         }

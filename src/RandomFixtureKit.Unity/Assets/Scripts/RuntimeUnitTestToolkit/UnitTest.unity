@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 99089802}
   - component: {fileID: 99089801}
   m_Layer: 5
-  m_Name: Scrollbar
+  m_Name: ListScrollbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -602,7 +602,7 @@ GameObject:
   - component: {fileID: 1337584758}
   - component: {fileID: 1337584761}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ClearButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -842,7 +842,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1157,7 +1157,7 @@ GameObject:
   - component: {fileID: 1903152287}
   - component: {fileID: 1903152288}
   m_Layer: 5
-  m_Name: VerticalLayout
+  m_Name: ListLayoutToAttach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1352,7 +1352,7 @@ GameObject:
   - component: {fileID: 2074381938}
   - component: {fileID: 2074381937}
   m_Layer: 5
-  m_Name: Scrollbar
+  m_Name: LogScrollbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

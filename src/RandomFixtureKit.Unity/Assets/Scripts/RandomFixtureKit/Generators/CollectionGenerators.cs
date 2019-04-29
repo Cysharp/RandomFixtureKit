@@ -89,7 +89,7 @@ namespace RandomFixtureKit.Generators
             var arrayGenerator = context.GetGenerator(elemType.MakeArrayType());
 
             var innerArray = arrayGenerator.Generate(context);
-            return Activator.CreateInstance(type, new[] { innerArray });
+            return ReflectionHelper.CreateInstance(type, new[] { innerArray });
         }
     }
 
@@ -112,7 +112,7 @@ namespace RandomFixtureKit.Generators
             var elemType = type.GetGenericArguments()[0];
             var generator = context.GetGenerator(elemType);
 
-            var list = Activator.CreateInstance(type) as IList;
+            var list = ReflectionHelper.CreateInstance(type) as IList;
             for (int i = 0; i < length; i++)
             {
                 list.Add(generator.Generate(context));
@@ -144,7 +144,7 @@ namespace RandomFixtureKit.Generators
             var keyGenerator = context.GetGenerator(keyType);
             var valueGenerator = context.GetGenerator(valueType);
 
-            var dict = Activator.CreateInstance(type) as IDictionary;
+            var dict = ReflectionHelper.CreateInstance(type) as IDictionary;
             for (int i = 0; i < length; i++)
             {
                 dict[keyGenerator.Generate(context)] = valueGenerator.Generate(context);
@@ -174,7 +174,7 @@ namespace RandomFixtureKit.Generators
 
             var add = Type.GetMethod(AddMethodName, new[] { elemType });
 
-            var collection = Activator.CreateInstance(Type);
+            var collection = ReflectionHelper.CreateInstance(Type);
             for (int i = 0; i < length; i++)
             {
                 add.Invoke(collection, new[] { generator.Generate(context) });
@@ -253,11 +253,12 @@ namespace RandomFixtureKit.Generators
             var generator = context.GetGenerator(typeof(Dictionary<,>).MakeGenericType(new[] { genType[0], genType[1].MakeArrayType() }));
             var dictionary = generator.Generate(context);
 
-            var lookup = Activator.CreateInstance(typeof(PseudoLookup<,>).MakeGenericType(genType), new[] { dictionary });
+            var lookup = ReflectionHelper.CreateInstance(typeof(PseudoLookup<,>).MakeGenericType(genType), new[] { dictionary });
             return lookup;
         }
 
-        class PseudoLookup<TKey, TValue> : ILookup<TKey, TValue>
+        // require to type hint to use in IL2CPP
+        public class PseudoLookup<TKey, TValue> : ILookup<TKey, TValue>
         {
             readonly Dictionary<TKey, TValue[]> dict;
 

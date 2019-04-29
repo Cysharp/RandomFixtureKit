@@ -101,7 +101,7 @@ namespace RandomFixtureKit.Generators
             var keyGen = context.GetGenerator(genArgs[0]);
             var valueGen = context.GetGenerator(genArgs[1]);
 
-            return Activator.CreateInstance(Type, new[] { keyGen.Generate(context), valueGen.Generate(context) });
+            return ReflectionHelper.CreateInstance(Type, new[] { keyGen.Generate(context), valueGen.Generate(context) });
         }
     }
 
@@ -194,11 +194,12 @@ namespace RandomFixtureKit.Generators
         public object Generate(in GenerationContext context)
         {
             var elem = Type.GetGenericArguments()[0];
-            var helper = Activator.CreateInstance(typeof(ValueGenerator<>).MakeGenericType(elem), new[] { (object)context.GetGenerator(elem).Generate(context) });
-            return Activator.CreateInstance(Type, new[] { helper.GetType().GetMethod("GetFunc").Invoke(helper, null) });
+            var helper = ReflectionHelper.CreateInstance(typeof(ValueGenerator<>).MakeGenericType(elem), new[] { (object)context.GetGenerator(elem).Generate(context) });
+            return ReflectionHelper.CreateInstance(Type, new[] { helper.GetType().GetMethod("GetFunc").Invoke(helper, null) });
         }
 
-        class ValueGenerator<T>
+        // public for IL2CPP
+        public class ValueGenerator<T>
         {
             readonly T value;
 

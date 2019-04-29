@@ -75,11 +75,11 @@ namespace FluentAssertions
             {
                 if (expected - delta <= actual && actual <= expected + delta)
                 {
-                    Assert.Pass();
+                    // OK.
                 }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"Fail BeCloseTo, actual {actual} but expected:{expected} +- {delta}");
                 }
             }
         }

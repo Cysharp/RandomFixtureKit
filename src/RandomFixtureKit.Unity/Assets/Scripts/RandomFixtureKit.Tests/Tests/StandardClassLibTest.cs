@@ -14,6 +14,7 @@ namespace RandomFixtureKit.Tests
         [Fact]
         public void Generics()
         {
+
             {
                 var x = FixtureFactory.Create<KeyValuePair<string, int>>();
                 var y = FixtureFactory.Create<KeyValuePair<string, int>>();
@@ -21,6 +22,10 @@ namespace RandomFixtureKit.Tests
                 x.Value.Should().NotBe(y.Value);
             }
             {
+                // type hint for IL2CPP
+                _ = new LazyGenerator.ValueGenerator<int>(0);
+                _ = new Lazy<int>(() => 0);
+
                 var x = FixtureFactory.Create<Lazy<int>>();
                 var y = FixtureFactory.Create<Lazy<int>>();
                 x.Value.Should().NotBe(y.Value);

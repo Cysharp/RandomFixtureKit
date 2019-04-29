@@ -25,7 +25,6 @@
         <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
-
     <!-- Copy files for unity build/test -->
     <PropertyGroup>
         <UnityAssetsRoot>$(ProjectDir)..\RandomFixtureKit.Unity\Assets\Scripts\</UnityAssetsRoot>

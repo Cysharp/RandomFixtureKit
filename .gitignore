@@ -332,3 +332,4 @@ ASALocalRun/
 # Unity
 **/Library
 **/Temp
+*.unitypackage

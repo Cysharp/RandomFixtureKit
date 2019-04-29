@@ -13,6 +13,15 @@ namespace RandomFixtureKit.Tests
         [Fact]
         public void ConcreteTypes()
         {
+            // IL2CPP hint.
+            _ = new Dictionary<int, int>();
+            _ = new Queue<int>();
+            _ = new Stack<int>();
+            _ = new LinkedList<int>();
+            new ConcurrentQueue<int>().Enqueue(0);
+            new ConcurrentStack<int>().Push(0);
+            _ = new ConcurrentDictionary<int, int>();
+
             ShouldAllRandom(FixtureFactory.Create<int[]>());
             ShouldAllRandom(FixtureFactory.Create<ArraySegment<int>>());
             ShouldAllRandom(FixtureFactory.Create<List<int>>());
@@ -28,6 +37,9 @@ namespace RandomFixtureKit.Tests
         [Fact]
         public void InterfaceTypes()
         {
+            // IL2CPP hint.
+            _ = new RandomFixtureKit.Generators.InterfaceLookupGenerator.PseudoLookup<int, int>(null);
+
             ShouldAllRandom(FixtureFactory.Create<IEnumerable<int>>());
             ShouldAllRandom(FixtureFactory.Create<ICollection<int>>());
             ShouldAllRandom(FixtureFactory.Create<IList<int>>());

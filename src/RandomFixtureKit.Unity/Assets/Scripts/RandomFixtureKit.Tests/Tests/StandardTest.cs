@@ -15,7 +15,7 @@ namespace RandomFixtureKit.Tests
             var xs = Enumerable.Range(1, 1000).Select(_ => FixtureFactory.Create<bool>()).ToArray();
             var foo = xs.ToLookup(x => x);
             foo.Count.Should().Be(2);
-            foo[true].Count().Should().BeCloseTo(10, 50); // try to check exception
+            foo[true].Count().Should().BeCloseTo(500, 50);
             foo[false].Count().Should().BeCloseTo(500, 50);
         }
 

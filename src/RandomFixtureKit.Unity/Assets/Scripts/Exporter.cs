@@ -69,8 +69,15 @@ public static class Exporter
             throw new Exception("Unknown BuildTarget, please use [win] or [mac] or [linux]");
         }
 
-        // always use IL2CPP.
-        PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.IL2CPP);
+        // Linux => Mono(currently not supported)
+        if (buildTarget == BuildTarget.StandaloneLinux64)
+        {
+            PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
+        }
+        else
+        {
+            PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.IL2CPP);
+        }
 
         UnityEngine.Debug.Log("Start to Build " + buildTargetString + " binary");
         BuildPipeline.BuildPlayer(new BuildPlayerOptions

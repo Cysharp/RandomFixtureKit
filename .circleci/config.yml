@@ -21,7 +21,6 @@ jobs:
   # Unity, create .unitypackage and make IL2CPP headless build and test it.
   build-unity:
     executor: unity
-    working_directory: /src/RandomFixtureKit.Unity
     steps:
       - checkout
       # get activation file, if fail to activate unity, use this key and activate from https://license.unity3d.com/manual
@@ -30,13 +29,21 @@ jobs:
       # get from UNITY_LICENSE envvar(base64 encoded(cat foo.ulf | base64 )), this file is generated from above manual activation
       - run: echo ${UNITY_LICENSE} | base64 -di  >> .circleci/Unity_v2018.x.ulf
       - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -manualLicenseFile .circleci/Unity_v2018.x.ulf || exit 0
-      # create cli IL2CPP testrunner to bin/tests and run it.
-      - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.BuildCliTestLinux
-      - run: ./bin/tests
-      # create .unitypackage
-      - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.Export
+      # Execute scripts
+      - run:
+          name: Build Linux
+          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.BuildCliTestLinux
+          working_directory: src/RandomFixtureKit.Unity
+      - run:
+          name: Run IL2CPP TestRunner
+          command: /bin/tests
+          working_directory: src/RandomFixtureKit.Unity
+      - run:
+          name: Export unitypackage
+          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.Export
+          working_directory: src/RandomFixtureKit.Unity
       - store_artifacts:
-          path: ./RandomFixtureKit.unitypackage
+          path: src/RandomFixtureKit.Unity/RandomFixtureKit.unitypackage
           destination: /RandomFixtureKit.unitypackage
   # .NET Core, Release, create NuGet package and push.
   build-push:

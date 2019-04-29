@@ -123,56 +123,72 @@ namespace RuntimeUnitTestToolkit
 
         void Start()
         {
-            UnityEngine.Application.logMessageReceived += (a, b, c) =>
+            try
             {
-                logText.text += "[" + c + "]" + a + "\n";
-            };
-
-            var executeAll = new List<Func<Coroutine>>();
-            foreach (var ___item in tests)
-            {
-                var actionList = ___item; // be careful, capture in lambda
-
-                executeAll.Add(() => StartCoroutine(RunTestInCoroutine(actionList)));
-                Add(actionList.Key, () => StartCoroutine(RunTestInCoroutine(actionList)));
-            }
-
-            var executeAllButton = Add("Run All Tests", () => StartCoroutine(ExecuteAllInCoroutine(executeAll)));
-
-            clearButton.gameObject.GetComponent<Image>().color = new Color(170 / 255f, 170 / 255f, 170 / 255f, 1);
-            executeAllButton.gameObject.GetComponent<Image>().color = new Color(250 / 255f, 150 / 255f, 150 / 255f, 1);
-            executeAllButton.transform.SetSiblingIndex(1);
-
-            additionalActionsOnFirst.Reverse();
-            foreach (var item in additionalActionsOnFirst)
-            {
-                var newButton = GameObject.Instantiate(clearButton);
-                newButton.name = item.Name;
-                newButton.onClick.RemoveAllListeners();
-                newButton.GetComponentInChildren<Text>().text = item.Name;
-                newButton.onClick.AddListener(item.Action);
-                newButton.transform.SetParent(list);
-                newButton.transform.SetSiblingIndex(1);
-            }
-
-            clearButton.onClick.AddListener(() =>
-            {
-                logText.text = "";
-                foreach (var btn in list.GetComponentsInChildren<Button>())
+                UnityEngine.Application.logMessageReceived += (a, b, c) =>
                 {
-                    btn.interactable = true;
-                    btn.GetComponent<Image>().color = normalColor;
+                    logText.text += "[" + c + "]" + a + "\n";
+                };
+
+                var executeAll = new List<Func<Coroutine>>();
+                foreach (var ___item in tests)
+                {
+                    var actionList = ___item; // be careful, capture in lambda
+
+                    executeAll.Add(() => StartCoroutine(RunTestInCoroutine(actionList)));
+                    Add(actionList.Key, () => StartCoroutine(RunTestInCoroutine(actionList)));
                 }
+
+                var executeAllButton = Add("Run All Tests", () => StartCoroutine(ExecuteAllInCoroutine(executeAll)));
+
+                clearButton.gameObject.GetComponent<Image>().color = new Color(170 / 255f, 170 / 255f, 170 / 255f, 1);
                 executeAllButton.gameObject.GetComponent<Image>().color = new Color(250 / 255f, 150 / 255f, 150 / 255f, 1);
-            });
+                executeAllButton.transform.SetSiblingIndex(1);
 
-            listScrollBar.value = 1;
-            logScrollBar.value = 1;
+                additionalActionsOnFirst.Reverse();
+                foreach (var item in additionalActionsOnFirst)
+                {
+                    var newButton = GameObject.Instantiate(clearButton);
+                    newButton.name = item.Name;
+                    newButton.onClick.RemoveAllListeners();
+                    newButton.GetComponentInChildren<Text>().text = item.Name;
+                    newButton.onClick.AddListener(item.Action);
+                    newButton.transform.SetParent(list);
+                    newButton.transform.SetSiblingIndex(1);
+                }
 
-            if (Application.isBatchMode)
+                clearButton.onClick.AddListener(() =>
+                {
+                    logText.text = "";
+                    foreach (var btn in list.GetComponentsInChildren<Button>())
+                    {
+                        btn.interactable = true;
+                        btn.GetComponent<Image>().color = normalColor;
+                    }
+                    executeAllButton.gameObject.GetComponent<Image>().color = new Color(250 / 255f, 150 / 255f, 150 / 255f, 1);
+                });
+
+                listScrollBar.value = 1;
+                logScrollBar.value = 1;
+
+                if (Application.isBatchMode)
+                {
+                    // run immediately in player
+                    StartCoroutine(ExecuteAllInCoroutine(executeAll));
+                }
+            }
+            catch(Exception ex)
             {
-                // run immediately in player
-                StartCoroutine(ExecuteAllInCoroutine(executeAll));
+                if (Application.isBatchMode)
+                {
+                    // when failed(can not start runner), quit immediately.
+                    WriteToConsole(ex.ToString());
+                    Application.Quit(1);
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 

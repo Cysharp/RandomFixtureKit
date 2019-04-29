@@ -9,7 +9,7 @@ executors:
   unity:
     docker:
       # https://hub.docker.com/r/gableroux/unity3d/tags
-      - image: gableroux/unity3d:2019.1.0f2-windows
+      - image: gableroux/unity3d:2018.3.12f1-windows
 jobs:
   # .NET Core, Debug(try to build and test).
   build-test:

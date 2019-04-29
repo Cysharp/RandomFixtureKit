@@ -35,10 +35,7 @@ jobs:
           name: Build Linux(Mono)
           command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.BuildCliTestLinux
           working_directory: src/RandomFixtureKit.Unity
-      - run:
-          name: Run CLI TestRunner
-          command: /bin/linux-x64/tests
-          working_directory: src/RandomFixtureKit.Unity
+      - run: src/RandomFixtureKit.Unity/bin/linux-x64/tests
       - run:
           name: Build Windows(IL2CPP)
           command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.BuildCliTestWindows

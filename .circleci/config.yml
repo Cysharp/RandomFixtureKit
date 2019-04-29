@@ -9,7 +9,7 @@ executors:
   unity:
     docker:
       # https://hub.docker.com/r/gableroux/unity3d/tags
-      - image: gableroux/unity3d:2019.1.0f2
+      - image: gableroux/unity3d:2019.1.0f2-windows
 jobs:
   # .NET Core, Debug(try to build and test).
   build-test:
@@ -33,16 +33,19 @@ jobs:
       - run: apt update && apt install libunwind8 -y
       - run:
           name: Build Linux(Mono)
-          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.BuildCliTestLinux
+          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod Exporter.BuildCliTestLinux
           working_directory: src/RandomFixtureKit.Unity
       - run: src/RandomFixtureKit.Unity/bin/linux-x64/tests
       - run:
           name: Build Windows(IL2CPP)
-          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.BuildCliTestWindows
+          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod Exporter.BuildCliTestWindows
           working_directory: src/RandomFixtureKit.Unity
+      - store_artifacts:
+          path: src/RandomFixtureKit.Unity/bin/win-x64
+          destination: /bin/win-x64
       - run:
           name: Export unitypackage
-          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.Export
+          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod Exporter.Export
           working_directory: src/RandomFixtureKit.Unity
       - store_artifacts:
           path: src/RandomFixtureKit.Unity/RandomFixtureKit.unitypackage

@@ -52,17 +52,21 @@ public static class Exporter
     public static void BuildCliTest(string buildTargetString)
     {
         var buildTarget = BuildTarget.StandaloneWindows64;
+        var outputPath = "";
         if (buildTargetString.StartsWith("win", StringComparison.OrdinalIgnoreCase))
         {
             buildTarget = BuildTarget.StandaloneWindows64;
+            outputPath = "win-x64";
         }
         else if (buildTargetString.StartsWith("mac", StringComparison.OrdinalIgnoreCase) || buildTargetString.StartsWith("osx", StringComparison.OrdinalIgnoreCase))
         {
             buildTarget = BuildTarget.StandaloneOSX;
+            outputPath = "osx-x64";
         }
         else if (buildTargetString.StartsWith("linux", StringComparison.OrdinalIgnoreCase))
         {
             buildTarget = BuildTarget.StandaloneLinux64;
+            outputPath = "linux-x64";
         }
         else
         {
@@ -70,11 +74,11 @@ public static class Exporter
         }
 
         // Linux => Mono(currently not supported)
-        //if (buildTarget == BuildTarget.StandaloneLinux64)
-        //{
-        //    PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
-        //}
-        //else
+        if (buildTarget == BuildTarget.StandaloneLinux64)
+        {
+            PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
+        }
+        else
         {
             PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.IL2CPP);
         }
@@ -88,7 +92,7 @@ public static class Exporter
                     | BuildOptions.EnableHeadlessMode
                     | BuildOptions.IncludeTestAssemblies,
             scenes = new[] { "Assets/Scripts/RuntimeUnitTestToolkit/UnitTest.unity" },
-            locationPathName = "bin/tests" + ((buildTarget == BuildTarget.StandaloneWindows64) ? ".exe" : "")
+            locationPathName = $"bin/{outputPath}/tests" + ((buildTarget == BuildTarget.StandaloneWindows64) ? ".exe" : "")
         });
         UnityEngine.Debug.Log("Build Completed, files under bin dir.");
     }

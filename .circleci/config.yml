@@ -37,7 +37,11 @@ jobs:
           working_directory: src/RandomFixtureKit.Unity
       - run:
           name: Run CLI TestRunner
-          command: /bin/tests
+          command: /bin/linux-x64/tests
+          working_directory: src/RandomFixtureKit.Unity
+      - run:
+          name: Build Windows(IL2CPP)
+          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -noUpm -logFile -projectPath . -executeMethod Exporter.BuildCliTestWindows
           working_directory: src/RandomFixtureKit.Unity
       - run:
           name: Export unitypackage

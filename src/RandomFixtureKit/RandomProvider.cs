@@ -54,10 +54,10 @@ namespace RandomFixtureKit
             //for more information.
             //In the worst case, the expected number of calls is 2 (though usually it's
             //much closer to 1) so this loop doesn't really hurt performance at all.
+            byte[] buf = new byte[8];
             ulong ulongRand;
             do
             {
-                byte[] buf = new byte[8];
                 random.NextBytes(buf);
                 ulongRand = (ulong)BitConverter.ToInt64(buf, 0);
             } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);

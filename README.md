@@ -6,13 +6,15 @@ Fill random/edge-case value to target type for unit testing, supports both .NET 
 
 ![image](https://user-images.githubusercontent.com/46207/56805033-abce0480-6862-11e9-91d0-7ca9c08aa688.png)
 
-Documantation is not yet but core library is completed. .unitypackage and upm coming soon.
-
 NuGet: [RandomFixtureKit](https://www.nuget.org/packages/RandomFixtureKit)
 
 ```
 Install-Package RandomFixturekit
 ```
+
+Unity: [releases/RandomFixtureKit.unitypackage](https://github.com/Cysharp/RandomFixtureKit/releases)
+
+or package.json exists on `src/RandomFixtureKit.Unity/Assets/Scripts/RandomFixtureKit` for unity package manager.
 
 How to use
 ---
@@ -57,7 +59,60 @@ var v = FixtureFactory.Create<IFoo>(); // return Foo object
 
 edge-case, for example int is filled `int.MinValue`, `int.MaxValue`, `0`, `-1` or `1`. collection(array, list, etc...) is filled `null`, `zero-elements`, `one-elements`, `nine-elements`.
 
-TODO: More sample of combine resolvers and create custom generator.
+Custom Generator
+---
+Implement `IGenerator` and setup composite-resolver, you can control how generate values.
+
+
+```csharp
+// for example, increment Id on create MyClass value.
+public class MyClass
+{
+    public int Id { get; set; }
+    public int Age { get; set; }
+    public string Name { get; set; }
+
+    public override string ToString()
+    {
+        return (Id, Age, Name).ToString();
+    }
+}
+
+// Create IGenerator.
+public class MyClassSequentialIdGenerator : IGenerator
+{
+    int sequence = 0;
+    IGenerator fallbackGenerator = new Int32Generator();
+
+    // this generator called if requires int value.
+    public Type Type => typeof(int);
+
+    public object Generate(in GenerationContext context)
+    {
+        // check target int field belongs MyClass.
+        if (context.FieldInfo != null)
+        {
+            // auto-implemented property's field: <Id>k__BackingField
+            if (context.FieldInfo.DeclaringType == typeof(MyClass) && context.FieldInfo.Name.StartsWith("<Id>"))
+            {
+                return (sequence++);
+            }
+        }
+
+        return fallbackGenerator.Generate(context);
+    }
+}
+
+// setup generator to use
+var resolver = new CompositeResolver(new[] { new MyClassSequentialIdGenerator() }, new[] { StandardResolver.NonNull });
+var fixture = new Fixture(resolver); // fixture is instance version of FixtureFactory
+
+var foo = fixture.CreateMany<MyClass>(100);
+foreach (var item in foo)
+{
+    Console.WriteLine(item);
+}
+```
 
 Author Info
 ---

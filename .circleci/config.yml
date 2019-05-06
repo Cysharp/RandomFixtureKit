@@ -11,14 +11,6 @@ executors:
       # https://hub.docker.com/r/gableroux/unity3d/tags
       - image: gableroux/unity3d:2018.3.12f1-windows
 jobs:
-  # .NET Core, Debug(try to build and test).
-  build-test:
-    executor: dotnet
-    steps:
-      - checkout
-      - run: dotnet build -c Debug
-      - run: dotnet test -c Debug --no-build
-  # Unity, create .unitypackage and make IL2CPP headless build and test it.
   build-unity:
     executor: unity
     steps:
@@ -33,23 +25,24 @@ jobs:
       - run: apt update && apt install libunwind8 -y
       - run:
           name: Build Linux(Mono)
-          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod Exporter.BuildCliTestLinux
+          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod UnitTestBuilder.BuildUnitTest /headless /ScriptBackend Mono2x /BuildTarget StandaloneLinux64
           working_directory: src/RandomFixtureKit.Unity
-      - run: src/RandomFixtureKit.Unity/bin/linux-x64/tests
-      - run:
-          name: Build Windows(IL2CPP)
-          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod Exporter.BuildCliTestWindows
-          working_directory: src/RandomFixtureKit.Unity
-      - store_artifacts:
-          path: src/RandomFixtureKit.Unity/bin/win-x64
-          destination: /bin/win-x64
+      - run: src/RandomFixtureKit.Unity/bin/UnitTest/StandaloneLinux64_Mono2x/test
       - run:
           name: Export unitypackage
-          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod Exporter.Export
+          command: /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod PackageExporter.Export
           working_directory: src/RandomFixtureKit.Unity
       - store_artifacts:
           path: src/RandomFixtureKit.Unity/RandomFixtureKit.unitypackage
           destination: /RandomFixtureKit.unitypackage
+  # .NET Core, Debug(try to build and test).
+  build-test:
+    executor: dotnet
+    steps:
+      - checkout
+      - run: dotnet build -c Debug
+      - run: dotnet test -c Debug --no-build
+  # Unity, create .unitypackage and make IL2CPP headless build and test it.
   # .NET Core, Release, create NuGet package and push.
   build-push:
     executor: dotnet

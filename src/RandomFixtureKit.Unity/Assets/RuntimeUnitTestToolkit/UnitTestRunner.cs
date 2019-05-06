@@ -1,112 +1,22 @@
-﻿using System;
-using System.Linq;
+﻿using NUnit.Framework;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.TestTools;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace RuntimeUnitTestToolkit
 {
-    public static class UnitTest
-    {
-        public static void AddTest(Action test)
-        {
-            try
-            {
-                AddTest(test.Target.GetType().Name, test.Method.Name, test);
-            }
-            catch (Exception ex)
-            {
-                UnityEngine.Debug.LogException(ex);
-            }
-        }
-
-        public static void AddTest(string group, string title, Action test)
-        {
-            try
-            {
-                UnitTestRunner.AddTest(group, title, test);
-            }
-            catch (Exception ex)
-            {
-                UnityEngine.Debug.LogException(ex);
-            }
-        }
-
-        public static void AddAsyncTest(Func<IEnumerator> asyncTestCoroutine)
-        {
-            try
-            {
-                AddAsyncTest(asyncTestCoroutine.Target.GetType().Name, asyncTestCoroutine.Method.Name, asyncTestCoroutine);
-            }
-            catch (Exception ex)
-            {
-                UnityEngine.Debug.LogException(ex);
-            }
-        }
-
-        public static void AddAsyncTest(string group, string title, Func<IEnumerator> asyncTestCoroutine)
-        {
-            try
-            {
-                UnitTestRunner.AddAsyncTest(group, title, asyncTestCoroutine);
-            }
-            catch (Exception ex)
-            {
-                UnityEngine.Debug.LogException(ex);
-            }
-        }
-
-        public static void AddCustomAction(string name, UnityAction action)
-        {
-            try
-            {
-                UnitTestRunner.AddCutomAction(name, action);
-            }
-            catch (Exception ex)
-            {
-                UnityEngine.Debug.LogException(ex);
-            }
-        }
-
-        public static void RegisterAllMethods<T>()
-            where T : new()
-        {
-            try
-            {
-                var test = new T();
-
-                var methods = typeof(T).GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                foreach (var item in methods)
-                {
-                    if (item.GetParameters().Length != 0) continue;
-
-                    if (item.ReturnType == typeof(IEnumerator))
-                    {
-                        var factory = (Func<IEnumerator>)Delegate.CreateDelegate(typeof(Func<IEnumerator>), test, item);
-                        AddAsyncTest(factory);
-                    }
-                    else if (item.ReturnType == typeof(void))
-                    {
-                        var invoke = (Action)Delegate.CreateDelegate(typeof(Action), test, item);
-                        AddTest(invoke);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogException(ex);
-            }
-        }
-    }
-
     public class UnitTestRunner : MonoBehaviour
     {
         // object is IEnumerator or Func<IEnumerator>
-        static Dictionary<string, List<KeyValuePair<string, object>>> tests = new Dictionary<string, List<KeyValuePair<string, object>>>();
+        Dictionary<string, List<KeyValuePair<string, object>>> tests = new Dictionary<string, List<KeyValuePair<string, object>>>();
 
-        static List<Pair> additionalActionsOnFirst = new List<Pair>();
+        List<Pair> additionalActionsOnFirst = new List<Pair>();
 
         public Button clearButton;
         public RectTransform list;
@@ -129,6 +39,12 @@ namespace RuntimeUnitTestToolkit
                 {
                     logText.text += "[" + c + "]" + a + "\n";
                 };
+
+                // register all test types
+                foreach (var item in GetTestTargetTypes())
+                {
+                    RegisterAllMethods(item);
+                }
 
                 var executeAll = new List<Func<Coroutine>>();
                 foreach (var ___item in tests)
@@ -177,7 +93,7 @@ namespace RuntimeUnitTestToolkit
                     StartCoroutine(ExecuteAllInCoroutine(executeAll));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (Application.isBatchMode)
                 {
@@ -204,7 +120,37 @@ namespace RuntimeUnitTestToolkit
             return newButton;
         }
 
-        public static void AddTest(string group, string title, Action test)
+        static IEnumerable<Type> GetTestTargetTypes()
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var n = assembly.FullName;
+                if (n.StartsWith("UnityEngine")) continue;
+                if (n.StartsWith("mscorlib")) continue;
+                if (n.StartsWith("System")) continue;
+
+                foreach (var item in assembly.GetTypes())
+                {
+                    foreach (var method in item.GetMethods())
+                    {
+                        var t1 = method.GetCustomAttribute<TestAttribute>(true);
+                        if (t1 != null)
+                        {
+                            yield return item;
+                            break;
+                        }
+                        var t2 = method.GetCustomAttribute<UnityTestAttribute>(true);
+                        if (t2 != null)
+                        {
+                            yield return item;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void AddTest(string group, string title, Action test)
         {
             List<KeyValuePair<string, object>> list;
             if (!tests.TryGetValue(group, out list))
@@ -216,7 +162,7 @@ namespace RuntimeUnitTestToolkit
             list.Add(new KeyValuePair<string, object>(title, test));
         }
 
-        public static void AddAsyncTest(string group, string title, Func<IEnumerator> asyncTestCoroutine)
+        public void AddAsyncTest(string group, string title, Func<IEnumerator> asyncTestCoroutine)
         {
             List<KeyValuePair<string, object>> list;
             if (!tests.TryGetValue(group, out list))
@@ -228,9 +174,67 @@ namespace RuntimeUnitTestToolkit
             list.Add(new KeyValuePair<string, object>(title, asyncTestCoroutine));
         }
 
-        public static void AddCutomAction(string name, UnityAction action)
+        public void AddCutomAction(string name, UnityAction action)
         {
             additionalActionsOnFirst.Add(new Pair { Name = name, Action = action });
+        }
+
+
+        public void RegisterAllMethods<T>()
+            where T : new()
+        {
+            RegisterAllMethods(typeof(T));
+        }
+
+        public void RegisterAllMethods(Type testType)
+        {
+            try
+            {
+                var test = Activator.CreateInstance(testType);
+
+                var methods = testType.GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                foreach (var item in methods)
+                {
+                    try
+                    {
+                        var iteratorTest = item.GetCustomAttribute<UnityEngine.TestTools.UnityTestAttribute>(true);
+                        if (iteratorTest != null)
+                        {
+                            if (item.GetParameters().Length == 0 && item.ReturnType == typeof(IEnumerator))
+                            {
+                                var factory = (Func<IEnumerator>)Delegate.CreateDelegate(typeof(Func<IEnumerator>), test, item);
+                                AddAsyncTest(factory.Target.GetType().Name, factory.Method.Name, factory);
+                            }
+                            else
+                            {
+                                UnityEngine.Debug.Log(testType.Name + "." + item.Name + " currently does not supported in RuntumeUnitTestToolkit(multiple parameter or return type is invalid).");
+                            }
+                        }
+
+                        var standardTest = item.GetCustomAttribute<NUnit.Framework.TestAttribute>(true);
+                        if (standardTest != null)
+                        {
+                            if (item.GetParameters().Length == 0 && item.ReturnType == typeof(void))
+                            {
+                                var invoke = (Action)Delegate.CreateDelegate(typeof(Action), test, item);
+                                AddTest(invoke.Target.GetType().Name, invoke.Method.Name, invoke);
+                            }
+                            else
+                            {
+                                UnityEngine.Debug.Log(testType.Name + "." + item.Name + " currently does not supported in RuntumeUnitTestToolkit(multiple parameter or return type is invalid).");
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        UnityEngine.Debug.LogError(testType.Name + "." + item.Name + " failed to register method, exception: " + e.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
         }
 
         System.Collections.IEnumerator ScrollLogToEndNextFrame()
@@ -348,15 +352,24 @@ namespace RuntimeUnitTestToolkit
 
             if (Application.isBatchMode)
             {
+                var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                bool disableAutoClose = (scene.name.Contains("DisableAutoClose"));
+
                 if (allTestGreen)
                 {
                     WriteToConsole("Test Complete Successfully");
-                    Application.Quit();
+                    if (!disableAutoClose)
+                    {
+                        Application.Quit();
+                    }
                 }
                 else
                 {
                     WriteToConsole("Test Failed, please see [NG] log.");
-                    Application.Quit(1);
+                    if (!disableAutoClose)
+                    {
+                        Application.Quit(1);
+                    }
                 }
             }
         }

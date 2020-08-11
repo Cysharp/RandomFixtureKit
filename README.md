@@ -1,6 +1,7 @@
+[![GitHub Actions](https://github.com/Cysharp/RandomFixtureKit/workflows/Build-Debug/badge.svg)](https://github.com/Cysharp/RandomFixtureKit/actions) [![Releases](https://img.shields.io/github/release/Cysharp/RandomFixtureKit.svg)](https://github.com/Cysharp/RandomFixtureKit/releases)
+
 RandomFixtureKit
 ===
-[![CircleCI](https://circleci.com/gh/Cysharp/RandomFixtureKit.svg?style=svg)](https://circleci.com/gh/Cysharp/RandomFixtureKit)
 
 Fill random/edge-case value to target type for unit testing, supports both .NET Standard and Unity. This lib is similar as [AutoFixture](https://github.com/AutoFixture/AutoFixture) but has some different things.
 
@@ -15,6 +16,17 @@ Install-Package RandomFixturekit
 Unity: [releases/RandomFixtureKit.unitypackage](https://github.com/Cysharp/RandomFixtureKit/releases)
 
 or package.json exists on `src/RandomFixtureKit.Unity/Assets/Scripts/RandomFixtureKit` for unity package manager.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
+
+- [How to use](#how-to-use)
+- [Custom Generator](#custom-generator)
+- [Author Info](#author-info)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 How to use
 ---

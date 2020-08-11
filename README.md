@@ -16,6 +16,11 @@ Unity: [releases/RandomFixtureKit.unitypackage](https://github.com/Cysharp/Rando
 
 or package.json exists on `src/RandomFixtureKit.Unity/Assets/Scripts/RandomFixtureKit` for unity package manager.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 How to use
 ---
 

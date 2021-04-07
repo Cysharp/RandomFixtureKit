@@ -154,8 +154,8 @@ jobs:
       # Store artifacts.
       - uses: actions/upload-artifact@v2
         with:
-          name: RandomFixtureKit.Unity.${{ env.GIT_TAG }}.unitypackage
-          path: ./src/RandomFixtureKit.Unity/RandomFixtureKit.Unity.${{ env.GIT_TAG }}.unitypackage
+          name: RandomFixtureKit.${{ env.GIT_TAG }}.unitypackage
+          path: ./src/RandomFixtureKit.Unity/RandomFixtureKit.${{ env.GIT_TAG }}.unitypackage
 
   create-release:
     if: github.event.inputs.dry_run == 'false'
@@ -191,8 +191,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./RandomFixtureKit.Unity.${{ env.GIT_TAG }}.unitypackage/RandomFixtureKit.Unity.${{ env.GIT_TAG }}.unitypackage
-          asset_name: RandomFixtureKit.Unity.${{ env.GIT_TAG }}.unitypackage
+          asset_path: ./RandomFixtureKit.${{ env.GIT_TAG }}.unitypackage/RandomFixtureKit.${{ env.GIT_TAG }}.unitypackage
+          asset_name: RandomFixtureKit.${{ env.GIT_TAG }}.unitypackage
           asset_content_type: application/octet-stream
 
   cleanup:

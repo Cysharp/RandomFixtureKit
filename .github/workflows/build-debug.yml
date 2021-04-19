@@ -81,9 +81,3 @@ jobs:
             echo "Great, all .meta files are commited."
           fi
         working-directory: src/RandomFixtureKit.Unity
-
-      # Store artifacts.
-      - uses: actions/upload-artifact@v1
-        with:
-          name: RandomFixtureKit.Unity.unitypackage
-          path: ./src/RandomFixtureKit.Unity/RandomFixtureKit.Unity.unitypackage

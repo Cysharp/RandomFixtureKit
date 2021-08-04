@@ -36,7 +36,7 @@ namespace RandomFixtureKit
         }
     }
 
-    public readonly ref struct TypeStack
+    public readonly struct TypeStack
     {
         readonly Stack<Type> stack;
 
@@ -63,7 +63,7 @@ namespace RandomFixtureKit
             return c;
         }
 
-        public readonly ref struct Exit // : IDisposable
+        public readonly struct Exit: IDisposable
         {
             readonly TypeStack parent;
 

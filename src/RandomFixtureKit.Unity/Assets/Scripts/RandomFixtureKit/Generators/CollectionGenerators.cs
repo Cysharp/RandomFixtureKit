@@ -19,6 +19,7 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
+            context.TypeStack.Enter(Type);
             var elemType = Type.GetElementType();
             var generator = context.GetGenerator(elemType);
             var rank = Type.GetArrayRank();
@@ -85,6 +86,7 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
+            context.TypeStack.Enter(Type);
             var elemType = type.GetGenericArguments()[0];
             var arrayGenerator = context.GetGenerator(elemType.MakeArrayType());
 
@@ -109,6 +111,7 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
+            context.TypeStack.Enter(Type);
             var elemType = type.GetGenericArguments()[0];
             var generator = context.GetGenerator(elemType);
 
@@ -143,6 +146,7 @@ namespace RandomFixtureKit.Generators
             var valueType = genArgs[1];
             var keyGenerator = context.GetGenerator(keyType);
             var valueGenerator = context.GetGenerator(valueType);
+            context.TypeStack.Enter(Type);
 
             var dict = ReflectionHelper.CreateInstance(type) as IDictionary;
             for (int i = 0; i < length; i++)
@@ -169,6 +173,7 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
+            context.TypeStack.Enter(Type);
             var elemType = Type.GetGenericArguments()[0];
             var generator = context.GetGenerator(elemType);
 
@@ -249,6 +254,7 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
+            context.TypeStack.Enter(Type);
             var genType = type.GenericTypeArguments;
             var generator = context.GetGenerator(typeof(Dictionary<,>).MakeGenericType(new[] { genType[0], genType[1].MakeArrayType() }));
             var dictionary = generator.Generate(context);

@@ -58,7 +58,7 @@ namespace RandomFixtureKit
             var c = 0;
             foreach (var item in stack)
             {
-                if (item == type) c++;
+                if (type.IsAssignableFrom(item)) c++;
             }
             return c;
         }

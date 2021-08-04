@@ -19,21 +19,24 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
-            var elemType = Type.GetElementType();
-            var generator = context.GetGenerator(elemType);
-            var rank = Type.GetArrayRank();
-
-            var array = Array.CreateInstance(elemType, Enumerable.Range(0, rank).Select(_ => length).ToArray());
-            switch (rank)
+            using (var scope = context.TypeStack.Enter(Type))
             {
-                case 1: SetOne(array, generator, context); break;
-                case 2: SetTwo(array, generator, context); break;
-                case 3: SetThree(array, generator, context); break;
-                default:
-                    throw new InvalidOperationException($"Array rank:{rank} is not supported.");
-            }
+                var elemType = Type.GetElementType();
+                var generator = context.GetGenerator(elemType);
+                var rank = Type.GetArrayRank();
 
-            return array;
+                var array = Array.CreateInstance(elemType, Enumerable.Range(0, rank).Select(_ => length).ToArray());
+                switch (rank)
+                {
+                    case 1: SetOne(array, generator, context); break;
+                    case 2: SetTwo(array, generator, context); break;
+                    case 3: SetThree(array, generator, context); break;
+                    default:
+                        throw new InvalidOperationException($"Array rank:{rank} is not supported.");
+                }
+
+                return array;
+            }
         }
 
         void SetOne(Array array, IGenerator generator, GenerationContext context)
@@ -85,11 +88,14 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
-            var elemType = type.GetGenericArguments()[0];
-            var arrayGenerator = context.GetGenerator(elemType.MakeArrayType());
+            using (var scope = context.TypeStack.Enter(Type))
+            {
+                var elemType = type.GetGenericArguments()[0];
+                var arrayGenerator = context.GetGenerator(elemType.MakeArrayType());
 
-            var innerArray = arrayGenerator.Generate(context);
-            return ReflectionHelper.CreateInstance(type, new[] { innerArray });
+                var innerArray = arrayGenerator.Generate(context);
+                return ReflectionHelper.CreateInstance(type, new[] { innerArray });
+            }
         }
     }
 
@@ -109,16 +115,19 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
-            var elemType = type.GetGenericArguments()[0];
-            var generator = context.GetGenerator(elemType);
-
-            var list = ReflectionHelper.CreateInstance(type) as IList;
-            for (int i = 0; i < length; i++)
+            using (var scope = context.TypeStack.Enter(Type))
             {
-                list.Add(generator.Generate(context));
-            }
+                var elemType = type.GetGenericArguments()[0];
+                var generator = context.GetGenerator(elemType);
 
-            return list;
+                var list = ReflectionHelper.CreateInstance(type) as IList;
+                for (int i = 0; i < length; i++)
+                {
+                    list.Add(generator.Generate(context));
+                }
+
+                return list;
+            }
         }
     }
 
@@ -138,19 +147,22 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
-            var genArgs = type.GetGenericArguments();
-            var keyType = genArgs[0];
-            var valueType = genArgs[1];
-            var keyGenerator = context.GetGenerator(keyType);
-            var valueGenerator = context.GetGenerator(valueType);
-
-            var dict = ReflectionHelper.CreateInstance(type) as IDictionary;
-            for (int i = 0; i < length; i++)
+            using (var scope = context.TypeStack.Enter(Type))
             {
-                dict[keyGenerator.Generate(context)] = valueGenerator.Generate(context);
-            }
+                var genArgs = type.GetGenericArguments();
+                var keyType = genArgs[0];
+                var valueType = genArgs[1];
+                var keyGenerator = context.GetGenerator(keyType);
+                var valueGenerator = context.GetGenerator(valueType);
 
-            return dict;
+                var dict = ReflectionHelper.CreateInstance(type) as IDictionary;
+                for (int i = 0; i < length; i++)
+                {
+                    dict[keyGenerator.Generate(context)] = valueGenerator.Generate(context);
+                }
+
+                return dict;
+            }
         }
     }
 
@@ -169,18 +181,21 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
-            var elemType = Type.GetGenericArguments()[0];
-            var generator = context.GetGenerator(elemType);
-
-            var add = Type.GetMethod(AddMethodName, new[] { elemType });
-
-            var collection = ReflectionHelper.CreateInstance(Type);
-            for (int i = 0; i < length; i++)
+            using (var scope = context.TypeStack.Enter(Type))
             {
-                add.Invoke(collection, new[] { generator.Generate(context) });
-            }
+                var elemType = Type.GetGenericArguments()[0];
+                var generator = context.GetGenerator(elemType);
 
-            return collection;
+                var add = Type.GetMethod(AddMethodName, new[] { elemType });
+
+                var collection = ReflectionHelper.CreateInstance(Type);
+                for (int i = 0; i < length; i++)
+                {
+                    add.Invoke(collection, new[] { generator.Generate(context) });
+                }
+
+                return collection;
+            }
         }
     }
 
@@ -249,12 +264,15 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
-            var genType = type.GenericTypeArguments;
-            var generator = context.GetGenerator(typeof(Dictionary<,>).MakeGenericType(new[] { genType[0], genType[1].MakeArrayType() }));
-            var dictionary = generator.Generate(context);
+            using (var scope = context.TypeStack.Enter(Type))
+            {
+                var genType = type.GenericTypeArguments;
+                var generator = context.GetGenerator(typeof(Dictionary<,>).MakeGenericType(new[] { genType[0], genType[1].MakeArrayType() }));
+                var dictionary = generator.Generate(context);
 
-            var lookup = ReflectionHelper.CreateInstance(typeof(PseudoLookup<,>).MakeGenericType(genType), new[] { dictionary });
-            return lookup;
+                var lookup = ReflectionHelper.CreateInstance(typeof(PseudoLookup<,>).MakeGenericType(genType), new[] { dictionary });
+                return lookup;
+            }
         }
 
         // require to type hint to use in IL2CPP

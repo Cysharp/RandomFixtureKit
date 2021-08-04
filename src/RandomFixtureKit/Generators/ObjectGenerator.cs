@@ -19,8 +19,7 @@ namespace RandomFixtureKit.Generators
 
         public object Generate(in GenerationContext context)
         {
-            var scope = context.TypeStack.Enter(type);
-            try
+            using (var scope = context.TypeStack.Enter(type))
             {
                 var obj = FormatterServices.GetUninitializedObject(type);
 
@@ -37,10 +36,6 @@ namespace RandomFixtureKit.Generators
                 }
 
                 return obj;
-            }
-            finally
-            {
-                scope.Dispose();
             }
         }
     }

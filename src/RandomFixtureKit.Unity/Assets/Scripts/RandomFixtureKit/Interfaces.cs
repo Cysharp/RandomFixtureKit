@@ -36,7 +36,7 @@ namespace RandomFixtureKit
         }
     }
 
-    public readonly ref struct TypeStack
+    public readonly struct TypeStack
     {
         readonly Stack<Type> stack;
 
@@ -58,12 +58,12 @@ namespace RandomFixtureKit
             var c = 0;
             foreach (var item in stack)
             {
-                if (item == type) c++;
+                if (type.IsAssignableFrom(item)) c++;
             }
             return c;
         }
 
-        public readonly ref struct Exit // : IDisposable
+        public readonly struct Exit: IDisposable
         {
             readonly TypeStack parent;
 

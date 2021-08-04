@@ -20,4 +20,23 @@
     <ProjectReference Include="..\..\src\RandomFixtureKit\RandomFixtureKit.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TreeStructureTest.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TreeStructureTest.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="TreeStructureTest.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TreeStructureTest.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

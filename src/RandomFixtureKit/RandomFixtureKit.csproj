@@ -19,6 +19,7 @@
         <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>test</PackageTags>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
 
     <PropertyGroup>

@@ -25,7 +25,6 @@ jobs:
   build-unity:
     if: "((github.event_name == 'push' && github.repository_owner == 'Cysharp') || startsWith(github.event.pull_request.head.label, 'Cysharp:'))"
     strategy:
-      max-parallel: 1
       matrix:
         unity: ["2019.3.9f1", "2019.4.13f1", "2020.1.12f1"]
         include:
@@ -39,21 +38,21 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v3
-      # Execute script: UnitTestBuilder.BuildUnitTest
-      # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod UnitTestBuilder.BuildUnitTest /headless /ScriptBackend Mono2x /BuildTarget StandaloneLinux64
-      - name: Build Windows(Mono)
-        uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets[matrix.license] }}
-        with:
-          projectPath: src/RandomFixtureKit.Unity
-          unityVersion: ${{ matrix.unity }}
-          targetPlatform: StandaloneLinux64
-          buildMethod: UnitTestBuilder.BuildUnitTest
-          customParameters: /headless /ScriptBackend Mono2x
-          versioning: None
-      - name: Execute UnitTest
-        run: ./src/RandomFixtureKit.Unity/bin/UnitTest/StandaloneLinux64_Mono2x/test
+      # # Execute script: UnitTestBuilder.BuildUnitTest
+      # # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod UnitTestBuilder.BuildUnitTest /headless /ScriptBackend Mono2x /BuildTarget StandaloneLinux64
+      # - name: Build Windows(Mono)
+      #   uses: game-ci/unity-builder@v2
+      #   env:
+      #     UNITY_LICENSE: ${{ secrets[matrix.license] }}
+      #   with:
+      #     projectPath: src/RandomFixtureKit.Unity
+      #     unityVersion: ${{ matrix.unity }}
+      #     targetPlatform: StandaloneLinux64
+      #     buildMethod: UnitTestBuilder.BuildUnitTest
+      #     customParameters: /headless /ScriptBackend Mono2x
+      #     versioning: None
+      # - name: Execute UnitTest
+      #   run: ./src/RandomFixtureKit.Unity/bin/UnitTest/StandaloneLinux64_Mono2x/test
 
       # Execute scripts: Export Package
       # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod PackageExporter.Export

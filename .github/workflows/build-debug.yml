@@ -38,21 +38,21 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v3
-      # Execute script: UnitTestBuilder.BuildUnitTest
-      # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod UnitTestBuilder.BuildUnitTest /headless /ScriptBackend Mono2x /BuildTarget StandaloneLinux64
-      - name: Build Windows(Mono)
-        uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets[matrix.license] }}
-        with:
-          projectPath: src/RandomFixtureKit.Unity
-          unityVersion: ${{ matrix.unity }}
-          targetPlatform: StandaloneLinux64
-          buildMethod: UnitTestBuilder.BuildUnitTest
-          customParameters: /headless /ScriptBackend Mono2x
-          versioning: None
-      - name: Execute UnitTest
-        run: ./src/RandomFixtureKit.Unity/bin/UnitTest/StandaloneLinux64_Mono2x/test
+      # # Execute script: UnitTestBuilder.BuildUnitTest
+      # # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod UnitTestBuilder.BuildUnitTest /headless /ScriptBackend Mono2x /BuildTarget StandaloneLinux64
+      # - name: Build Windows(Mono)
+      #   uses: game-ci/unity-builder@v2
+      #   env:
+      #     UNITY_LICENSE: ${{ secrets[matrix.license] }}
+      #   with:
+      #     projectPath: src/RandomFixtureKit.Unity
+      #     unityVersion: ${{ matrix.unity }}
+      #     targetPlatform: StandaloneLinux64
+      #     buildMethod: UnitTestBuilder.BuildUnitTest
+      #     customParameters: /headless /ScriptBackend Mono2x
+      #     versioning: None
+      # - name: Execute UnitTest
+      #   run: ./src/RandomFixtureKit.Unity/bin/UnitTest/StandaloneLinux64_Mono2x/test
 
       # Execute scripts: Export Package
       # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod PackageExporter.Export

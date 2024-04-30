@@ -39,6 +39,7 @@ jobs:
         with:
           name: nuget
           path: ./publish
+          retention-days: 1
 
   build-unity:
     needs: [update-packagejson]
@@ -103,6 +104,7 @@ jobs:
         with:
           name: RandomFixtureKit.${{ inputs.tag }}.unitypackage
           path: ./src/RandomFixtureKit.Unity/RandomFixtureKit.${{ inputs.tag }}.unitypackage
+          retention-days: 1
 
   # release
   create-release:

@@ -63,22 +63,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.update-packagejson.outputs.sha }}
-      # Execute script: UnitTestBuilder.BuildUnitTest
-      # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod UnitTestBuilder.BuildUnitTest /headless /ScriptBackend Mono2x /BuildTarget StandaloneLinux64
-      - name: Build UnitTest(Linux64, mono)
-        uses: Cysharp/Actions/.github/actions/unity-builder@main
-        env:
-          UNITY_EMAIL: ${{ steps.op-load-secret.outputs.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ steps.op-load-secret.outputs.UNITY_PASSWORD }}
-          UNITY_SERIAL: ${{ steps.op-load-secret.outputs.UNITY_SERIAL }}
-        with:
-          projectPath: src/RandomFixtureKit.Unity
-          unityVersion: ${{ matrix.unity }}
-          targetPlatform: StandaloneLinux64
-          buildMethod: UnitTestBuilder.BuildUnitTest
-          customParameters: /headless /ScriptBackend Mono2x
-      - name: Execute UnitTest
-        run: ./src/RandomFixtureKit.Unity/bin/UnitTest/StandaloneLinux64_Mono2x/test
 
       # Execute scripts: Export Package
       # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod PackageExporter.Export

@@ -642,7 +642,7 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     Server: 1
-    Standalone: 1
+    Standalone: 0
   il2cppCompilerConfiguration:
     Standalone: 0
   il2cppCodeGeneration:

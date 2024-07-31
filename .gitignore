@@ -337,4 +337,4 @@ src/RandomFixtureKit.Unity/[Uu]ser[Ss]ettings/
 src/RandomFixtureKit.Unity/*.sln
 src/RandomFixtureKit.Unity/*.csproj
 src/RandomFixtureKit.Unity/*.unitypackage
-!src/RandomFixtureKit.Unity/Packages/
+!src/RandomFixtureKit.Unity/Packages/*

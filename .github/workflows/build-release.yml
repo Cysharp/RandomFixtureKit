@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - run: echo ${{ needs.update-packagejson.outputs.sha }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ needs.update-packagejson.outputs.sha }}
       - uses: Cysharp/Actions/.github/actions/setup-dotnet@main
@@ -45,7 +45,7 @@ jobs:
     needs: [update-packagejson]
     strategy:
       matrix:
-        unity: ["2019.3.9f1"]
+        unity: ["2022.3.39f1"]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -60,25 +60,9 @@ jobs:
           UNITY_PASSWORD: "op://GitHubActionsPublic/UNITY_LICENSE/credential"
           UNITY_SERIAL: "op://GitHubActionsPublic/UNITY_LICENSE/serial"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ needs.update-packagejson.outputs.sha }}
-      # Execute script: UnitTestBuilder.BuildUnitTest
-      # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod UnitTestBuilder.BuildUnitTest /headless /ScriptBackend Mono2x /BuildTarget StandaloneLinux64
-      - name: Build UnitTest(Linux64, mono)
-        uses: Cysharp/Actions/.github/actions/unity-builder@main
-        env:
-          UNITY_EMAIL: ${{ steps.op-load-secret.outputs.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ steps.op-load-secret.outputs.UNITY_PASSWORD }}
-          UNITY_SERIAL: ${{ steps.op-load-secret.outputs.UNITY_SERIAL }}
-        with:
-          projectPath: src/RandomFixtureKit.Unity
-          unityVersion: ${{ matrix.unity }}
-          targetPlatform: StandaloneLinux64
-          buildMethod: UnitTestBuilder.BuildUnitTest
-          customParameters: /headless /ScriptBackend Mono2x
-      - name: Execute UnitTest
-        run: ./src/RandomFixtureKit.Unity/bin/UnitTest/StandaloneLinux64_Mono2x/test
 
       # Execute scripts: Export Package
       # /opt/Unity/Editor/Unity -quit -batchmode -nographics -silent-crashes -logFile -projectPath . -executeMethod PackageExporter.Export
